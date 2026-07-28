@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
   addCounter,
@@ -159,6 +160,34 @@ test("Mouyi hides the first choice until handoff and succeeds on different choic
   );
   assert.equal(failed.success, false);
   assert.equal(failed.effectTitle, "弃履狂奔");
+});
+
+test("Mouyi shows tactic effects to the opponent before they choose", async () => {
+  const rules = await import("../app/lib/tabletop-assistant-rules.mjs");
+  assert.equal(typeof rules.getMouyiOpponentOptions, "function");
+  for (const heroName of ["谋徐晃", "谋马超", "韩玄", "界张嶷"]) {
+    const options = rules.getMouyiOpponentOptions(heroName);
+    assert.equal(options.length, 2);
+    assert.ok(options.every((option) => option.effect));
+  }
+  assert.deepEqual(rules.getMouyiOpponentOptions("谋马超"), [
+    {
+      title: "识破【直取敌营】",
+      effect: "预防对方获得你一张牌。",
+    },
+    {
+      title: "识破【扰阵疲敌】",
+      effect: "预防对方摸两张牌。",
+    },
+  ]);
+});
+
+test("Mouyi opponent buttons render their effect text", async () => {
+  const source = await readFile(
+    new URL("../app/components/assistants/MouyiAssistant.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.ok(source.includes("<b>{option.title}</b><small>{option.effect}</small>"));
 });
 
 test("conversion parser exposes both sides and toggles after use", () => {

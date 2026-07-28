@@ -6,6 +6,7 @@ import {
   confirmMouyiHandoff,
   createMouyiState,
   getMouyiConfig,
+  getMouyiOpponentOptions,
 } from "../../lib/tabletop-assistant-rules.mjs";
 import type { AssistantPanelProps } from "./types";
 
@@ -45,17 +46,16 @@ export function MouyiAssistant({ hero }: AssistantPanelProps) {
   }
 
   if (flow.phase === "opponent") {
-    const opponentOptions = config.opponentOptions
-      ?? config.ownerOptions.map((option: { title: string }) => ({ title: `识破【${option.title}】` }));
+    const opponentOptions = getMouyiOpponentOptions(hero.name);
     return (
       <div className="private-choice mouyi-private">
         <span>仅 {config.opponentLabel} 查看</span>
         <h3>{config.opponentOptions ? "选择你的应对" : "猜测对方选择的谋略"}</h3>
         <p>点击后立即同时翻开双方选择。</p>
         <div>
-          {opponentOptions.map((option: { title: string }, index: number) => (
+          {opponentOptions.map((option: { title: string; effect: string }, index: number) => (
             <button key={option.title} onClick={() => setFlow(chooseMouyi(flow, "opponent", index))} type="button">
-              <b>{option.title}</b>
+              <b>{option.title}</b><small>{option.effect}</small>
             </button>
           ))}
         </div>
@@ -63,8 +63,7 @@ export function MouyiAssistant({ hero }: AssistantPanelProps) {
     );
   }
 
-  const opponentOptions = config.opponentOptions
-    ?? config.ownerOptions.map((option: { title: string }) => ({ title: `识破【${option.title}】` }));
+  const opponentOptions = getMouyiOpponentOptions(hero.name);
   return (
     <div className="assistant-result mouyi-result">
       <span>谋弈揭晓</span>

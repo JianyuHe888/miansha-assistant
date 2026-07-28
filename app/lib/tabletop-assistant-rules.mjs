@@ -20,10 +20,13 @@ const MOUYI_CONFIGS = {
         title: "围城断粮",
         effect:
           "若其判定区没有【兵粮寸断】，将牌堆顶一张牌当无距离限制的【兵粮寸断】对其使用；否则获得其一张牌。",
+        opponentEffect:
+          "预防对方对你使用【兵粮寸断】；若你的判定区已有【兵粮寸断】，则预防其获得你一张牌。",
       },
       {
         title: "擂鼓进军",
         effect: "视为对其使用一张【决斗】。",
+        opponentEffect: "预防对方对你使用【决斗】。",
       },
     ],
   },
@@ -31,8 +34,16 @@ const MOUYI_CONFIGS = {
     ownerLabel: "谋马超",
     opponentLabel: "目标角色",
     ownerOptions: [
-      { title: "直取敌营", effect: "获得其一张牌。" },
-      { title: "扰阵疲敌", effect: "摸两张牌。" },
+      {
+        title: "直取敌营",
+        effect: "获得其一张牌。",
+        opponentEffect: "预防对方获得你一张牌。",
+      },
+      {
+        title: "扰阵疲敌",
+        effect: "摸两张牌。",
+        opponentEffect: "预防对方摸两张牌。",
+      },
     ],
   },
   韩玄: {
@@ -42,8 +53,13 @@ const MOUYI_CONFIGS = {
       {
         title: "金蝉脱壳",
         effect: "随机弃置其一张手牌；若为基本牌，你获得之。",
+        opponentEffect: "预防韩玄随机弃置你一张手牌，并在该牌为基本牌时获得之。",
       },
-      { title: "弃履狂奔", effect: "此【杀】伤害-1。" },
+      {
+        title: "弃履狂奔",
+        effect: "此【杀】伤害-1。",
+        opponentEffect: "预防此【杀】的伤害-1。",
+      },
     ],
   },
   界张嶷: {
@@ -54,8 +70,16 @@ const MOUYI_CONFIGS = {
       { title: "安抚", effect: "" },
     ],
     opponentOptions: [
-      { title: "反抗" },
-      { title: "顺从" },
+      {
+        title: "反抗",
+        effect:
+          "若对方选择【镇压】，其对你造成1点伤害并摸一张牌；若其选择【安抚】，你对其造成1点伤害，然后其摸一张牌。",
+      },
+      {
+        title: "顺从",
+        effect:
+          "若对方选择【镇压】，其获得你一张牌，然后交给你两张牌；若其选择【安抚】，你交给其两张牌，牌数不足则改为你跳过下一个摸牌阶段。",
+      },
     ],
     outcomes: {
       "0:0": "你对其造成1点伤害，然后摸一张牌。",
@@ -229,6 +253,17 @@ export function calculateFuhanMaxHp(removedMeiying, playerCount) {
 
 export function getMouyiConfig(heroName) {
   return MOUYI_CONFIGS[heroName] ?? null;
+}
+
+export function getMouyiOpponentOptions(heroName) {
+  const config = getMouyiConfig(heroName);
+  if (!config) return [];
+  return config.opponentOptions
+    ? config.opponentOptions.map((option) => ({ ...option }))
+    : config.ownerOptions.map((option) => ({
+        title: `识破【${option.title}】`,
+        effect: option.opponentEffect ?? option.effect,
+      }));
 }
 
 export function createMouyiState(heroName) {
