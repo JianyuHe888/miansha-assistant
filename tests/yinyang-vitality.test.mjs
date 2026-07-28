@@ -15,7 +15,7 @@ test("yin-yang health renders current and lost health with an accessible numeric
   assert.match(component, /aria-label/);
 });
 
-test("hero card, detail, and live vitality tracker share the yin-yang display", async () => {
+test("the one detail card composes hero card and tracker yin-yang displays", async () => {
   const [card, detail, tracker, css] = await Promise.all([
     source("../app/components/HeroCard.tsx"),
     source("../app/components/HeroDetail.tsx"),
@@ -25,7 +25,9 @@ test("hero card, detail, and live vitality tracker share the yin-yang display", 
 
   assert.match(card, /<YinYangHealth/);
   assert.doesNotMatch(card, />◆</);
-  assert.match(detail, /<YinYangHealth/);
+  assert.match(detail, /<HeroCard/);
+  assert.match(detail, /<VitalityTracker/);
+  assert.doesNotMatch(detail, /<YinYangHealth/);
   assert.match(tracker, /<YinYangHealth/);
   assert.match(css, /\.yin-yang-health/);
   assert.match(css, /\.yin-yang-fish\.is-lost/);
@@ -33,7 +35,7 @@ test("hero card, detail, and live vitality tracker share the yin-yang display", 
   assert.doesNotMatch(css, /\.yin-yang-fish\s*\{[^}]*#a63b2e/s);
 });
 
-test("armor uses a separate shield graphic everywhere vitality is shown", async () => {
+test("armor uses a separate shield graphic in the card and its tracker", async () => {
   const [component, card, detail, tracker, css] = await Promise.all([
     source("../app/components/ArmorDisplay.tsx"),
     source("../app/components/HeroCard.tsx"),
@@ -47,7 +49,9 @@ test("armor uses a separate shield graphic everywhere vitality is shown", async 
   assert.match(component, /aria-label/);
   assert.doesNotMatch(component, /is-empty/);
   assert.match(card, /<ArmorDisplay/);
-  assert.match(detail, /<ArmorDisplay/);
+  assert.match(detail, /<HeroCard/);
+  assert.match(detail, /<VitalityTracker/);
+  assert.doesNotMatch(detail, /<ArmorDisplay/);
   assert.match(tracker, /<ArmorDisplay/);
   assert.match(css, /\.armor-shield/);
   assert.match(css, /clip-path:\s*polygon/);

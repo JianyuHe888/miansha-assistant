@@ -6,6 +6,7 @@ import { getPresetLevel } from "./mobile-pool-rules.mjs";
 import { getTabletopAssistantModules } from "../app/lib/tabletop-assistant-rules.mjs";
 
 const dataUrl = new URL("../app/data/heroes.json", import.meta.url);
+const skillReferencesUrl = new URL("../app/data/skill-references.json", import.meta.url);
 const cacheUrl = new URL("./.cache/", import.meta.url);
 const mobileRosterUrl = "https://www.sanguosha.cn/index.php/pc/hero-list.html";
 const wikiApiUrl = "https://wiki.biligame.com/msgs/api.php";
@@ -312,6 +313,12 @@ async function readOfficialRoster() {
 }
 
 async function readWikiImages(wikiHeroes) {
+  const cached = await readCachedJson("wiki-classic-images.json");
+  if (cached) {
+    console.log(`已使用缓存的移动版 WIKI 经典形象 ${cached.length} 张`);
+    return new Map(cached);
+  }
+
   const imageTitlesByHero = new Map();
   const imageUrlByTitle = new Map();
 
@@ -329,15 +336,10 @@ async function readWikiImages(wikiHeroes) {
     for (const page of response.query?.pages ?? []) {
       const normalizedTitle = normalizeName(page.title);
       const classicPrefix = normalizeName(`文件:${normalizedTitle}-经典形象.`);
-      const avatarPrefix = normalizeName(`文件:${normalizedTitle}-头像.`);
       const images = page.images ?? [];
-      const image =
-        images.find((candidate) =>
-          normalizeName(candidate.title).startsWith(classicPrefix),
-        ) ??
-        images.find((candidate) =>
-          normalizeName(candidate.title).startsWith(avatarPrefix),
-        );
+      const image = images.find((candidate) =>
+        normalizeName(candidate.title).startsWith(classicPrefix),
+      );
       if (image) imageTitlesByHero.set(page.title, image.title);
     }
     await sleep(500);
@@ -362,12 +364,14 @@ async function readWikiImages(wikiHeroes) {
     await sleep(500);
   }
 
-  return new Map(
+  const resolved = new Map(
     wikiHeroes.map((hero) => [
       hero.wikiName,
       imageUrlByTitle.get(imageTitlesByHero.get(hero.wikiName)) ?? "",
-    ]),
+    ]).filter(([, image]) => image),
   );
+  await writeCachedJson("wiki-classic-images.json", [...resolved]);
+  return resolved;
 }
 
 function normalizePack(heroName, rawPacks) {
@@ -397,7 +401,8 @@ function normalizePack(heroName, rawPacks) {
   return cleanText(rawPacks[0] ?? "独立扩展").replace(/包$/, "") || "独立扩展";
 }
 
-function normalizeFaction(value) {
+function normalizeFaction(value, heroName) {
+  if (heroName === "界严颜") return "蜀";
   return value === "群（晋）" ? "晋" : value;
 }
 
@@ -440,7 +445,7 @@ async function main() {
       return {
         wikiName: cleanText(row.fulltext),
         name: normalizeName(name),
-        faction: normalizeFaction(firstText(row, "势力")),
+        faction: normalizeFaction(firstText(row, "势力"), normalizeName(name)),
         modes: allText(row, "出现模式"),
         rawPacks: allText(row, "武将包"),
         hpText: literalText(printout(row, "经典体力")[0]),
@@ -457,20 +462,7 @@ async function main() {
     );
   const identityNames = new Set(wikiHeroes.map((hero) => hero.wikiName));
   const allSkills = wikiSkillRows.map((row) => skillFromRow(row));
-  const unmatchedWikiHeroes = wikiHeroes.filter(
-    (hero) => !officialRoster.has(normalizeName(hero.name)),
-  );
-  const cachedWikiImages = new Map(
-    unmatchedWikiHeroes
-      .map((hero) => [hero.wikiName, getExistingImage(hero.name, oldHeroes)])
-      .filter(([, image]) => image),
-  );
-  const wikiImages = new Map([
-    ...cachedWikiImages,
-    ...await readWikiImages(
-      unmatchedWikiHeroes.filter((hero) => !cachedWikiImages.has(hero.wikiName)),
-    ),
-  ]);
+  const wikiImages = await readWikiImages(wikiHeroes);
   const skillsByOwner = new Map();
 
   for (const skill of allSkills) {
@@ -499,7 +491,9 @@ async function main() {
     const skills = classifyHeroSkills(ownedSkills, allSkills);
     const vitality = parseVitality(wikiHero.hpText);
 
-    const fallbackImage = wikiImages.get(wikiHero.wikiName) ?? "";
+    const legacyImage = getExistingImage(wikiHero.name, oldHeroes);
+    const fallbackImage =
+      wikiImages.get(wikiHero.wikiName) ?? official?.image ?? legacyImage;
     if (!official && !fallbackImage) missingOfficial.push(wikiHero.name);
     if (skills.length === 0) missingSkills.push(wikiHero.name);
     if (!wikiHero.faction || !vitality || vitality.hp < 1) invalidHeroes.push(wikiHero.name);
@@ -523,7 +517,10 @@ async function main() {
       rarity: wikiHero.rarity,
       pack: normalizePack(wikiHero.name, wikiHero.rawPacks),
       sourcePack: wikiHero.rawPacks.join("、") || "未分类",
-      image: official?.image ?? fallbackImage,
+      image:
+        wikiImages.get(wikiHero.wikiName) ??
+        official?.image ??
+        legacyImage,
       officialUrl: official?.officialUrl ?? "https://www.sanguosha.cn/index.php/pc/hero-list.html",
       wikiUrl: wikiHero.wikiUrl,
       presetLevel: 4,
@@ -559,7 +556,41 @@ async function main() {
     );
   }
 
+  const identitySkillNames = new Set(
+    heroes.flatMap((hero) => hero.skills.map((skill) => skill.name)),
+  );
+  const quotedNames = new Set(
+    heroes.flatMap((hero) =>
+      hero.skills.flatMap((skill) =>
+        [...skill.description.matchAll(/[“「『]([^”」』]+)[”」』]/g)]
+          .map((match) => match[1]),
+      ),
+    ),
+  );
+  const skillReferences = [...quotedNames]
+    .filter((name) => !identitySkillNames.has(name))
+    .map((name) => {
+      const reference = allSkills.find(
+        (skill) => skill.name === name && skill.description,
+      );
+      return reference
+        ? {
+            name,
+            description: reference.description,
+            heroId: `wiki-${reference.owner}`,
+            heroName: reference.owner,
+          }
+        : null;
+    })
+    .filter(Boolean)
+    .sort((left, right) => left.name.localeCompare(right.name, "zh-CN"));
+
   await writeFile(dataUrl, `${JSON.stringify(heroes)}\n`, "utf8");
+  await writeFile(
+    skillReferencesUrl,
+    `${JSON.stringify(skillReferences)}\n`,
+    "utf8",
+  );
 
   const groupCounts = (property) =>
     Object.fromEntries(

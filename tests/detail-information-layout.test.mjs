@@ -15,16 +15,16 @@ test("desktop hero detail gives the information column substantially more room",
   );
 });
 
-test("hero information typography is larger while the phone portrait stays compact", () => {
+test("hero information typography remains readable while the phone card becomes full width", () => {
   assert.match(css, /\.skill-item h4\s*\{[^}]*font-size:\s*17px/s);
   assert.match(css, /\.skill-item p\s*\{[^}]*font-size:\s*14px[^}]*line-height:\s*1\.78/s);
   assert.match(
     css,
-    /@media \(max-width:\s*620px\)[\s\S]*?\.hero-modal\s*\{[^}]*grid-template-columns:\s*108px\s+minmax\(0,\s*1fr\)/s,
+    /@media \(max-width:\s*620px\)[\s\S]*?\.hero-modal\s*\{[^}]*grid-template-columns:\s*1fr/s,
   );
   assert.match(
     css,
-    /@media \(max-width:\s*620px\)[\s\S]*?\.skill-item p\s*\{[^}]*font-size:\s*11px/s,
+    /@media \(max-width:\s*620px\)[\s\S]*?\.hero-visual-column\s*\{[^}]*width:\s*min\(100%,\s*430px\)/s,
   );
 });
 

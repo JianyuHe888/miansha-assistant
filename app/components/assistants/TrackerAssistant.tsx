@@ -7,6 +7,7 @@ import {
   getSuggestedCounters,
   removeCounter,
   renameCounterSeat,
+  setCounter,
 } from "../../lib/tabletop-assistant-rules.mjs";
 import type { AssistantPanelProps } from "./types";
 
@@ -82,7 +83,26 @@ export function TrackerAssistant({ hero, state, onChange }: AssistantPanelProps)
                 </div>
                 <div className="counter-controls">
                   <button aria-label={`${row.seat}${row.mark}减一`} onClick={() => onChange(addCounter(current, row.mark, row.seat, -1))} type="button">−</button>
-                  <b>{row.count}</b>
+                  <input
+                    aria-label={`${row.seat}${row.mark}数量`}
+                    className="counter-value-input"
+                    max={suggestions.find((item) => item.name === row.mark)?.max ?? undefined}
+                    min={0}
+                    onChange={(event) => {
+                      const maximum = suggestions.find((item) => item.name === row.mark)?.max;
+                      const value = Number(event.target.value);
+                      onChange(setCounter(
+                        current,
+                        row.mark,
+                        row.seat,
+                        maximum ? Math.min(maximum, value) : value,
+                      ));
+                    }}
+                    onFocus={(event) => event.currentTarget.select()}
+                    step={1}
+                    type="number"
+                    value={row.count}
+                  />
                   <button aria-label={`${row.seat}${row.mark}加一`} onClick={() => onChange(addCounter(current, row.mark, row.seat, 1))} type="button">＋</button>
                   <button className="counter-remove" onClick={() => onChange(removeCounter(current, row.mark, row.seat))} type="button">清除</button>
                 </div>

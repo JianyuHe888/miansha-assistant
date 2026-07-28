@@ -52,6 +52,8 @@ test("all audited shared mechanics used by identity heroes tokenize as clickable
     "转换技",
     "使命技",
     "势力技",
+    "昂扬技",
+    "激昂",
     "结党",
     "拼点",
     "翻面",
@@ -77,6 +79,24 @@ test("all audited shared mechanics used by identity heroes tokenize as clickable
   }
 
   assert.ok(occurrences > 400, "the audit should cover the full hero pool, not a few examples");
+});
+
+test("昂扬技 explains its 激昂 reset condition", async () => {
+  const { SHARED_RULE_GLOSSARY, tokenizeSharedRuleText } = await loadGlossary();
+  const rule = SHARED_RULE_GLOSSARY.find((item) => item.id === "rousing-skill");
+
+  assert.deepEqual(rule.terms, ["昂扬技", "激昂"]);
+  assert.match(rule.summary, /可刷新的限定技/);
+  assert.match(rule.summary, /发动后失效/);
+  assert.match(rule.summary, /重置.*再次发动/);
+
+  const tokens = tokenizeSharedRuleText("昂扬技。激昂：执行过两个选项。");
+  assert.equal(tokens.filter((token) => token.kind === "rule").length, 2);
+  assert.ok(
+    tokens
+      .filter((token) => token.kind === "rule")
+      .every((token) => token.ruleId === "rousing-skill"),
+  );
 });
 
 test("shared rules open inside the existing skill card", async () => {

@@ -1,17 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getAssistantStorageKey, loadAssistantState, saveAssistantState } from "../lib/assistant-rules.mjs";
 import type { Hero } from "../lib/hero-types";
+import { buildSkillReferenceIndex } from "../lib/skill-reference-rules.mjs";
 import { createHeroCounterState, createVitalityState } from "../lib/tabletop-assistant-rules.mjs";
-import { ArmorDisplay } from "./ArmorDisplay";
 import { HeroCard } from "./HeroCard";
 import { SkillAssistant } from "./SkillAssistant";
 import { SkillText } from "./SkillText";
 import { VitalityTracker } from "./VitalityTracker";
-import { YinYangHealth } from "./YinYangHealth";
 
-const POOL_LABELS = ["", "经典身份", "界限平衡", "进阶平衡", "完整将池"];
 type CounterState = ReturnType<typeof createHeroCounterState>;
 type VitalityState = ReturnType<typeof createVitalityState>;
 
@@ -29,7 +27,14 @@ export function HeroDetail({
   const [counterState, setCounterState] = useState<CounterState>(() => createHeroCounterState(hero));
   const [flipped, setFlipped] = useState(false);
   const baseSkills = hero.skills.filter((skill) => skill.kind === "base");
-  const skillIndex = new Map(hero.skills.map((skill) => [skill.id, skill]));
+  const skillIndex = useMemo(
+    () => new Map(hero.skills.map((skill) => [skill.id, skill])),
+    [hero.skills],
+  );
+  const skillReferenceIndex = useMemo(
+    () => buildSkillReferenceIndex(heroes),
+    [heroes],
+  );
   const trackerStorageKey = getAssistantStorageKey("trackers", hero.id);
   const flipStorageKey = getAssistantStorageKey("card-face", hero.id);
 
@@ -58,7 +63,7 @@ export function HeroDetail({
 
   return (
     <div
-      aria-labelledby="hero-detail-title"
+      aria-label={`${hero.name}武将详情`}
       aria-modal="true"
       className="modal-backdrop"
       onMouseDown={(event) => {
@@ -68,7 +73,7 @@ export function HeroDetail({
     >
       <div className={`hero-modal${assistantOpen ? " assistant-expanded" : ""}`}>
         <button aria-label="关闭" className="modal-close" onClick={onClose} type="button">×</button>
-        <div className="hero-visual-column">
+        <div className="hero-card-section hero-visual-column">
           <HeroCard
             counterState={counterState}
             flipped={flipped}
@@ -78,31 +83,7 @@ export function HeroDetail({
           />
           <VitalityTracker hero={hero} onStateChange={setVitalityState} />
         </div>
-        <div className="modal-copy">
-          <span>CHARACTER CARD / 武将信息卡</span>
-          <div className="modal-name-row">
-            <div>
-              <small>{hero.sourcePack} · {hero.rarity}</small>
-              <h2 id="hero-detail-title">{hero.name}</h2>
-            </div>
-            <b className={`modal-faction faction-${hero.faction}`}>{hero.faction}</b>
-          </div>
-          <div className="detail-badges">
-            <span>{POOL_LABELS[hero.presetLevel]}</span>
-            {hero.faceToFace === "assisted" && <b>需辅助</b>}
-            {hero.faceToFace === "excluded" && <b>不可面杀</b>}
-          </div>
-          <dl>
-            <div><dt>势力</dt><dd>{hero.faction}</dd></div>
-            <div>
-              <dt>体力</dt>
-              <dd className="detail-vitality">
-                <YinYangHealth current={hero.hp} max={hero.maxHp ?? hero.hp} showNumbers />
-                {hero.armor ? <ArmorDisplay armor={hero.armor} showNumbers /> : null}
-              </dd>
-            </div>
-            <div><dt>系列</dt><dd>{hero.pack}</dd></div>
-          </dl>
+        <div className="hero-skill-section modal-copy">
           {hero.faceToFace === "excluded" && hero.excludedReason && (
             <p className="excluded-reason">{hero.excludedReason}</p>
           )}
@@ -112,7 +93,11 @@ export function HeroDetail({
               {baseSkills.map((skill) => (
                 <article className="skill-item" key={skill.id}>
                   <h4>{skill.name}</h4>
-                  <SkillText skill={skill} skillIndex={skillIndex} />
+                  <SkillText
+                    skill={skill}
+                    skillIndex={skillIndex}
+                    skillReferenceIndex={skillReferenceIndex}
+                  />
                 </article>
               ))}
             </div>

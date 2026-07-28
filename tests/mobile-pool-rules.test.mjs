@@ -18,6 +18,7 @@ test("assigns representative mobile identity releases to cumulative tiers", () =
   assert.equal(getPresetLevel(byName["周群"]), 3);
   assert.equal(getPresetLevel(byName["谋夏侯惇"]), 4);
   assert.equal(getPresetLevel(byName["势魏延"]), 4);
+  assert.equal(byName["界严颜"].faction, "蜀");
 });
 
 test("produces the approved current cumulative counts", () => {
@@ -25,10 +26,10 @@ test("produces the approved current cumulative counts", () => {
     ...hero,
     presetLevel: getPresetLevel(hero),
   }));
-  assert.equal(enriched.filter((hero) => hero.presetLevel <= 1).length, 149);
-  assert.equal(enriched.filter((hero) => hero.presetLevel <= 2).length, 293);
-  assert.equal(enriched.filter((hero) => hero.presetLevel <= 3).length, 400);
-  assert.equal(enriched.filter((hero) => hero.presetLevel <= 4).length, 573);
+  assert.equal(enriched.filter((hero) => hero.presetLevel <= 1).length, 148);
+  assert.equal(enriched.filter((hero) => hero.presetLevel <= 2).length, 291);
+  assert.equal(enriched.filter((hero) => hero.presetLevel <= 3).length, 397);
+  assert.equal(enriched.filter((hero) => hero.presetLevel <= 4).length, 572);
 });
 
 test("every generated hero has valid tier and face-to-face metadata", () => {

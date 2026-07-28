@@ -58,15 +58,15 @@ test("ships a complete and normalized mobile identity catalog", async () => {
   );
   const heroes = JSON.parse(source);
 
-  assert.equal(heroes.length, 573);
+  assert.equal(heroes.length, 572);
   assert.equal(
     heroes.reduce((total, hero) => total + hero.skills.length, 0),
-    1219,
+    1218,
   );
-  assert.equal(heroes.filter((hero) => hero.presetLevel <= 1).length, 149);
-  assert.equal(heroes.filter((hero) => hero.presetLevel <= 2).length, 293);
-  assert.equal(heroes.filter((hero) => hero.presetLevel <= 3).length, 400);
-  assert.equal(heroes.filter((hero) => hero.presetLevel <= 4).length, 573);
+  assert.equal(heroes.filter((hero) => hero.presetLevel <= 1).length, 148);
+  assert.equal(heroes.filter((hero) => hero.presetLevel <= 2).length, 291);
+  assert.equal(heroes.filter((hero) => hero.presetLevel <= 3).length, 397);
+  assert.equal(heroes.filter((hero) => hero.presetLevel <= 4).length, 572);
   const assisted = heroes.filter((hero) => hero.faceToFace === "assisted");
   assert.equal(
     assisted.length,
