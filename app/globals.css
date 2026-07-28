@@ -216,23 +216,22 @@ button { color: inherit; }
 .hp { max-width: 100px; display: grid; justify-items: end; gap: 3px; line-height: 1; }
 .yin-yang-health { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 7px; vertical-align: middle; }
 .yin-yang-fishes { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 2px; }
-.yin-yang-fish { color: #a63b2e; font-family: "Noto Serif SC", "Segoe UI Symbol", serif; font-size: 17px; font-style: normal; line-height: 1; text-shadow: 0 1px 0 rgba(255,255,255,.55); }
-.yin-yang-fish.is-lost { color: rgba(106,93,77,.17); text-shadow: none; -webkit-text-stroke: 1px rgba(106,93,77,.4); }
-.yin-yang-overflow { color: #766656; font-family: system-ui, sans-serif; font-size: 9px; }
-.yin-yang-numbers { color: #716355; font-family: Georgia, serif; font-size: 12px; white-space: nowrap; }
+.yin-yang-fish { color: #52c455; font-family: "Noto Serif SC", "Segoe UI Symbol", serif; font-size: 17px; font-style: normal; line-height: 1; text-shadow: 0 1px 0 rgba(255,255,255,.6), 0 0 5px rgba(82,196,85,.18); }
+.yin-yang-fish.is-lost { color: rgba(57,112,55,.13); text-shadow: none; -webkit-text-stroke: 1px rgba(57,112,55,.35); }
+.yin-yang-overflow { color: #367a3c; font-family: system-ui, sans-serif; font-size: 9px; }
+.yin-yang-numbers { color: #35783d; font-family: Georgia, serif; font-size: 12px; white-space: nowrap; }
 .yin-yang-health.is-compact { gap: 3px; }
 .yin-yang-health.is-compact .yin-yang-fishes { max-width: 76px; justify-content: flex-end; }
-.yin-yang-health.is-compact .yin-yang-fish { color: #e3b35f; font-size: 14px; text-shadow: 0 1px 4px rgba(0,0,0,.75); }
-.yin-yang-health.is-compact .yin-yang-fish.is-lost { color: rgba(238,220,185,.12); -webkit-text-stroke-color: rgba(238,220,185,.58); text-shadow: none; }
-.yin-yang-health.is-compact .yin-yang-overflow { color: #efd9b5; }
+.yin-yang-health.is-compact .yin-yang-fish { color: #75e36d; font-size: 14px; text-shadow: 0 1px 4px rgba(0,0,0,.8), 0 0 6px rgba(86,230,92,.5); }
+.yin-yang-health.is-compact .yin-yang-fish.is-lost { color: rgba(89,154,78,.13); -webkit-text-stroke-color: rgba(127,206,112,.52); text-shadow: none; }
+.yin-yang-health.is-compact .yin-yang-overflow { color: #a5efa0; }
 .armor-display { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 6px; vertical-align: middle; }
 .armor-shields { display: inline-flex; align-items: center; gap: 2px; }
-.armor-shield { width: 13px; height: 15px; display: inline-block; background: linear-gradient(145deg, #86b2c5, #355e73 75%); clip-path: polygon(50% 0, 94% 17%, 86% 68%, 50% 100%, 14% 68%, 6% 17%); filter: drop-shadow(0 1px 1px rgba(22,42,52,.3)); }
-.armor-shield.is-empty { background: rgba(62,101,119,.18); box-shadow: inset 0 0 0 1px rgba(62,101,119,.45); filter: none; }
-.armor-shields b { color: #3e6577; font-family: system-ui, sans-serif; font-size: 9px; }
-.armor-display > small { color: #3e6577; font-family: system-ui, sans-serif; font-size: 10px; white-space: nowrap; }
-.armor-display.is-compact .armor-shield { width: 10px; height: 12px; background: linear-gradient(145deg, #c3e2eb, #56859a 75%); filter: drop-shadow(0 1px 2px rgba(0,0,0,.6)); }
-.armor-display.is-compact .armor-shields b { color: #d9edf2; }
+.armor-shield { width: 13px; height: 15px; display: inline-block; background: linear-gradient(145deg, #e7c981, #a97825 75%); clip-path: polygon(50% 0, 94% 17%, 86% 68%, 50% 100%, 14% 68%, 6% 17%); filter: drop-shadow(0 1px 1px rgba(88,57,15,.35)); }
+.armor-shields b { color: #8b641f; font-family: system-ui, sans-serif; font-size: 9px; }
+.armor-display > small { color: #8b641f; font-family: system-ui, sans-serif; font-size: 10px; white-space: nowrap; }
+.armor-display.is-compact .armor-shield { width: 10px; height: 12px; background: linear-gradient(145deg, #f6dda2, #bd8b32 75%); filter: drop-shadow(0 1px 2px rgba(0,0,0,.65)); }
+.armor-display.is-compact .armor-shields b { color: #f0d79f; }
 .card-hitarea { position: absolute; z-index: 8; inset: 0; border: 0; background: transparent; cursor: pointer; }
 .card-hitarea:focus-visible { outline: 3px solid #f0cf91; outline-offset: -5px; }
 .hero-card:hover:has(.card-hitarea) { transform: translateY(-4px); box-shadow: 0 25px 50px rgba(54,34,20,.3); }
@@ -307,7 +306,7 @@ body.modal-open { overflow: hidden; }
 .vitality-tracker header strong small { color: #6f6254; font-size: 15px; }
 .vitality-tracker .vitality-current { gap: 5px; }
 .vitality-tracker .vitality-current .yin-yang-fish { font-size: 20px; }
-.vitality-tracker .vitality-current .yin-yang-numbers { color: #9e3026; font-size: 15px; font-weight: 700; }
+.vitality-tracker .vitality-current .yin-yang-numbers { color: #2f8739; font-size: 15px; font-weight: 700; }
 .vitality-tracker header .armor-value strong { color: #3e6577; }
 .vitality-tracker .armor-value { gap: 5px; }
 .vitality-tracker .armor-value .armor-shield { width: 16px; height: 18px; }

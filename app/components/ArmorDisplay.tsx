@@ -18,9 +18,7 @@ export function ArmorDisplay({
       role="img"
     >
       <span aria-hidden="true" className="armor-shields">
-        {safeArmor === 0 ? (
-          <i className="armor-shield is-empty" />
-        ) : Array.from({ length: visibleCount }, (_, index) => (
+        {Array.from({ length: visibleCount }, (_, index) => (
           <i className="armor-shield" key={index} />
         ))}
         {overflow > 0 && <b>+{overflow}</b>}

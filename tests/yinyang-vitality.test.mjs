@@ -29,6 +29,8 @@ test("hero card, detail, and live vitality tracker share the yin-yang display", 
   assert.match(tracker, /<YinYangHealth/);
   assert.match(css, /\.yin-yang-health/);
   assert.match(css, /\.yin-yang-fish\.is-lost/);
+  assert.match(css, /\.yin-yang-fish\s*\{[^}]*#52c455/s);
+  assert.doesNotMatch(css, /\.yin-yang-fish\s*\{[^}]*#a63b2e/s);
 });
 
 test("armor uses a separate shield graphic everywhere vitality is shown", async () => {
@@ -43,9 +45,12 @@ test("armor uses a separate shield graphic everywhere vitality is shown", async 
   assert.ok(component, "ArmorDisplay component should exist");
   assert.match(component, /armor-shield/);
   assert.match(component, /aria-label/);
+  assert.doesNotMatch(component, /is-empty/);
   assert.match(card, /<ArmorDisplay/);
   assert.match(detail, /<ArmorDisplay/);
   assert.match(tracker, /<ArmorDisplay/);
   assert.match(css, /\.armor-shield/);
   assert.match(css, /clip-path:\s*polygon/);
+  assert.match(css, /\.armor-shield\s*\{[^}]*#e7c981[^}]*#a97825/s);
+  assert.doesNotMatch(css, /\.armor-shield\s*\{[^}]*#86b2c5/s);
 });
