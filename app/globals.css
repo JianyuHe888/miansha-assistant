@@ -331,15 +331,19 @@ body.modal-open { overflow: hidden; }
 .skill-item h4 { margin: 0 0 5px; color: var(--cinnabar-dark); font-size: 15px; letter-spacing: .06em; }
 .skill-item p { margin: 0; color: #5f574e; font-family: system-ui, sans-serif; font-size: 12px; line-height: 1.72; }
 .modal-copy a { display: inline-flex; padding: 12px 17px; background: var(--cinnabar); color: white; font-family: system-ui, sans-serif; font-size: 12px; text-decoration: none; }
-.granted-skill-link, .granted-skill-shortcuts button { margin: 0 2px; padding: 0 3px; border: 0; border-bottom: 1px dashed var(--cinnabar); background: transparent; color: var(--cinnabar); font: inherit; font-weight: 750; cursor: pointer; }
-.granted-skill-link::after { content: "＋"; margin-left: 2px; font-size: .8em; }
-.granted-skill-link[aria-expanded="true"]::after { content: "－"; }
+.granted-skill-link, .shared-rule-link, .granted-skill-shortcuts button { margin: 0 2px; padding: 0 3px; border: 0; border-bottom: 1px dashed var(--cinnabar); background: transparent; color: var(--cinnabar); font: inherit; font-weight: 750; cursor: pointer; }
+.granted-skill-link::after, .shared-rule-link::after { content: "＋"; margin-left: 2px; font-size: .8em; }
+.granted-skill-link[aria-expanded="true"]::after, .shared-rule-link[aria-expanded="true"]::after { content: "－"; }
 .granted-skill-shortcuts { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin-top: 7px; color: #807568; font-family: system-ui, sans-serif; font-size: 10px; }
-.granted-skill-panel { margin-top: 10px; padding: 11px 12px; border: 1px solid rgba(167,51,39,.2); border-left: 3px solid var(--gold); background: rgba(246,237,218,.8); }
-.granted-skill-panel > div { display: flex; align-items: center; gap: 8px; }
-.granted-skill-panel > div span { padding: 2px 5px; background: var(--gold); color: white; font-family: system-ui, sans-serif; font-size: 9px; }
-.granted-skill-panel > div small { color: #8b7c69; font-family: system-ui, sans-serif; font-size: 9px; }
-.granted-skill-panel h5 { margin: 8px 0 3px; color: #6d4b22; font-size: 14px; }
+.granted-skill-panel, .shared-rule-panel { margin-top: 10px; padding: 11px 12px; border: 1px solid rgba(167,51,39,.2); border-left: 3px solid var(--gold); background: rgba(246,237,218,.8); }
+.granted-skill-panel > div, .shared-rule-panel > div { display: flex; align-items: center; gap: 8px; }
+.granted-skill-panel > div span, .shared-rule-panel > div span { padding: 2px 5px; background: var(--gold); color: white; font-family: system-ui, sans-serif; font-size: 9px; }
+.granted-skill-panel > div small, .shared-rule-panel > div small { color: #8b7c69; font-family: system-ui, sans-serif; font-size: 9px; }
+.granted-skill-panel h5, .shared-rule-panel h5 { margin: 8px 0 3px; color: #6d4b22; font-size: 14px; }
+.skill-item .shared-rule-panel > p { color: #62584c; line-height: 1.68; }
+.shared-rule-panel ul { margin: 9px 0 0; padding: 0; display: grid; gap: 6px; list-style: none; }
+.shared-rule-panel li { display: grid; grid-template-columns: 38px minmax(0, 1fr); align-items: baseline; gap: 8px; color: #62584c; font-family: system-ui, sans-serif; font-size: 11px; line-height: 1.55; }
+.shared-rule-panel li b { color: var(--cinnabar-dark); }
 .modal-links { display: flex; flex-wrap: wrap; gap: 8px; }
 .assistant-open-button { padding: 12px 17px; border: 0; background: var(--ink); color: white; font-family: system-ui, sans-serif; font-size: 12px; cursor: pointer; }
 
