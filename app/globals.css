@@ -204,7 +204,7 @@ button { color: inherit; }
 .hero-card[data-faction="神"] { --faction: #b89242; --faction-dark: #4e3710; }
 .hero-card[data-faction="魔"] { --faction: #6f2730; --faction-dark: #241015; }
 .card-grain { position: absolute; inset: 0; z-index: 0; background: radial-gradient(circle at 50% 70%, var(--faction), var(--faction-dark) 72%), repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0 1px, transparent 1px 4px); }
-.hero-art { position: absolute; z-index: 2; width: 112%; height: 91%; left: -6%; bottom: 6%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 8px 9px rgba(0,0,0,.4)); }
+.hero-art { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 8px 9px rgba(0,0,0,.4)); }
 .silhouette { position: absolute; inset: 22% 0 auto; z-index: 1; color: rgba(255,244,220,.09); font-size: clamp(80px, 12vw, 150px); font-weight: 900; text-align: center; }
 .ink-wash { position: absolute; z-index: 3; inset: 50% 0 0; background: linear-gradient(transparent, rgba(20,15,11,.18) 25%, rgba(20,15,11,.93) 100%); }
 .card-topline { position: absolute; z-index: 5; inset: 16px 15px auto; display: flex; align-items: flex-start; justify-content: space-between; }

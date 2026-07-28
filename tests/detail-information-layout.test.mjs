@@ -27,3 +27,16 @@ test("hero information typography is larger while the phone portrait stays compa
     /@media \(max-width:\s*620px\)[\s\S]*?\.skill-item p\s*\{[^}]*font-size:\s*11px/s,
   );
 });
+
+test("hero art fits the complete source image without enlarged cropping", () => {
+  const rule = css.match(/\.hero-art\s*\{([^}]*)\}/s)?.[1] ?? "";
+
+  assert.match(rule, /inset:\s*0/);
+  assert.match(rule, /width:\s*100%/);
+  assert.match(rule, /height:\s*100%/);
+  assert.match(rule, /object-fit:\s*contain/);
+  assert.match(rule, /object-position:\s*center bottom/);
+  assert.doesNotMatch(rule, /width:\s*(?:10[1-9]|1[1-9]\d|[2-9]\d\d)%/);
+  assert.doesNotMatch(rule, /left:\s*-/);
+  assert.doesNotMatch(rule, /object-fit:\s*cover/);
+});
