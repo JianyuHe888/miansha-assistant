@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { HeroCard } from "./components/HeroCard";
 import { HeroDetail } from "./components/HeroDetail";
 import { PoolSelector } from "./components/PoolSelector";
-import { SkillAssistant } from "./components/SkillAssistant";
 import heroData from "./data/heroes.json";
 import { cryptoIndex } from "./lib/assistant-rules.mjs";
 import { filterCatalog, filterDrawPool } from "./lib/pool-filter.mjs";
@@ -158,7 +157,6 @@ export default function Home() {
   const [isDrawing, setIsDrawing] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [inspected, setInspected] = useState<Hero | null>(null);
-  const [assistantHero, setAssistantHero] = useState<Hero | null>(null);
   const [presetLevel, setPresetLevel] = useState<PresetLevel>(2);
 
   const filterInput = useMemo(() => ({
@@ -194,7 +192,7 @@ export default function Home() {
   useEffect(() => {
     if (!inspected) return;
     const close = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !assistantHero) setInspected(null);
+      if (event.key === "Escape") setInspected(null);
     };
     window.addEventListener("keydown", close);
     document.body.classList.add("modal-open");
@@ -202,7 +200,7 @@ export default function Home() {
       window.removeEventListener("keydown", close);
       document.body.classList.remove("modal-open");
     };
-  }, [assistantHero, inspected]);
+  }, [inspected]);
 
   const clearRound = () => {
     setDrawn([]);
@@ -514,20 +512,9 @@ export default function Home() {
       {inspected && (
         <HeroDetail
           hero={inspected}
-          onClose={() => setInspected(null)}
-          onOpenAssistant={setAssistantHero}
-        />
-      )}
-      {assistantHero && (
-        <SkillAssistant
-          hero={assistantHero}
           heroes={heroes}
-          onClose={() => {
-            setAssistantHero(null);
-            window.requestAnimationFrame(() => {
-              document.querySelector<HTMLButtonElement>(".assistant-open-button")?.focus();
-            });
-          }}
+          key={inspected.id}
+          onClose={() => setInspected(null)}
         />
       )}
     </main>

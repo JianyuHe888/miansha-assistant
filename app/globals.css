@@ -277,6 +277,8 @@ footer a { color: var(--cinnabar); font-family: system-ui, sans-serif; font-size
 body.modal-open { overflow: hidden; }
 .modal-backdrop { position: fixed; z-index: 80; inset: 0; padding: 24px; display: grid; place-items: center; background: rgba(27,20,15,.82); backdrop-filter: blur(10px); animation: fadeIn .2s ease; }
 .hero-modal { width: min(980px, 100%); max-height: calc(100dvh - 48px); display: grid; grid-template-columns: minmax(270px, 340px) minmax(0, 1fr); gap: 38px; padding: 28px; overflow: hidden; background: #ece3d3; border: 1px solid rgba(255,255,255,.28); box-shadow: 0 30px 90px rgba(0,0,0,.45); position: relative; }
+.hero-modal.assistant-expanded { width: min(1480px, 100%); grid-template-columns: minmax(250px, 320px) minmax(300px, .8fr) minmax(380px, 1.2fr); gap: 24px; }
+.hero-modal.assistant-expanded .hero-visual-column, .hero-modal.assistant-expanded .modal-copy { align-self: start; }
 .hero-visual-column { min-width: 0; max-height: calc(100dvh - 104px); align-self: center; display: grid; gap: 0; overflow-y: auto; scrollbar-width: thin; }
 .hero-visual-column > .hero-card { width: 100%; }
 .vitality-tracker { position: relative; z-index: 3; margin: -8px 8px 0; padding: 13px; border: 1px solid #b9a78e; background: #f4ead7; box-shadow: 0 12px 24px rgba(65,43,25,.16); font-family: system-ui, sans-serif; }
@@ -341,9 +343,9 @@ body.modal-open { overflow: hidden; }
 .modal-links { display: flex; flex-wrap: wrap; gap: 8px; }
 .assistant-open-button { padding: 12px 17px; border: 0; background: var(--ink); color: white; font-family: system-ui, sans-serif; font-size: 12px; cursor: pointer; }
 
-.assistant-backdrop { position: fixed; z-index: 120; inset: 0; display: grid; justify-items: end; background: rgba(22,17,13,.72); backdrop-filter: blur(8px); }
-.assistant-drawer { width: min(920px, 100%); height: 100dvh; display: grid; grid-template-rows: auto auto minmax(0,1fr); background: #eee6d7; box-shadow: -25px 0 70px rgba(0,0,0,.35); }
+.assistant-inline { min-width: 0; max-height: calc(100dvh - 104px); display: grid; grid-template-rows: auto auto minmax(0,1fr); overflow: hidden; border-left: 1px solid var(--line); background: #eee6d7; }
 .assistant-header { min-height: 88px; padding: max(18px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) 18px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--line); background: rgba(247,241,229,.9); }
+.assistant-inline .assistant-header { padding-right: 56px; }
 .assistant-header span { color: var(--cinnabar); font-family: system-ui, sans-serif; font-size: 10px; letter-spacing: .12em; }
 .assistant-header h2 { margin: 5px 0 0; font-size: 25px; }
 .assistant-header-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 6px; }
@@ -498,6 +500,10 @@ body.modal-open { overflow: hidden; }
   footer p { grid-column: 1 / -1; grid-row: 2; margin: 0; }
   .huashen-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .jiedang-candidates { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .hero-modal.assistant-expanded { width: min(980px, 100%); grid-template-columns: minmax(220px, 300px) minmax(0, 1fr); align-items: start; overflow-y: auto; }
+  .hero-modal.assistant-expanded .hero-visual-column, .hero-modal.assistant-expanded .modal-copy { max-height: none; }
+  .hero-modal.assistant-expanded .assistant-inline { grid-column: 1 / -1; max-height: none; min-height: 560px; overflow: visible; border-top: 1px solid var(--line); border-left: 0; }
+  .hero-modal.assistant-expanded .assistant-panel { max-height: 70vh; }
 }
 
 @media (max-width: 620px) {
@@ -538,6 +544,7 @@ body.modal-open { overflow: hidden; }
   footer p { grid-column: auto; grid-row: auto; }
   .modal-backdrop { padding: 10px; }
   .hero-modal { width: 100%; max-height: calc(100dvh - 20px); grid-template-columns: 132px minmax(0,1fr); gap: 15px; padding: 44px 12px 14px; align-items: center; }
+  .hero-modal.assistant-expanded { grid-template-columns: 132px minmax(0,1fr); gap: 15px; }
   .hero-visual-column { align-self: start; position: sticky; top: 0; }
   .vitality-tracker { margin: -4px 0 0; padding: 7px; }
   .vitality-tracker header { grid-template-columns: 1fr auto; gap: 5px; }.vitality-tracker header > button { grid-column: 1 / -1; height: 25px; padding: 0; }

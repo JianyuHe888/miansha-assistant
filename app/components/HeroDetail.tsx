@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import type { Hero } from "../lib/hero-types";
 import { HeroCard } from "./HeroCard";
+import { SkillAssistant } from "./SkillAssistant";
 import { SkillText } from "./SkillText";
 import { VitalityTracker } from "./VitalityTracker";
 
@@ -9,13 +11,14 @@ const POOL_LABELS = ["", "经典身份", "界限平衡", "进阶平衡", "完整
 
 export function HeroDetail({
   hero,
+  heroes,
   onClose,
-  onOpenAssistant,
 }: {
   hero: Hero;
+  heroes: Hero[];
   onClose: () => void;
-  onOpenAssistant: (hero: Hero) => void;
 }) {
+  const [assistantOpen, setAssistantOpen] = useState(false);
   const baseSkills = hero.skills.filter((skill) => skill.kind === "base");
   const skillIndex = new Map(hero.skills.map((skill) => [skill.id, skill]));
 
@@ -29,7 +32,7 @@ export function HeroDetail({
       }}
       role="dialog"
     >
-      <div className="hero-modal">
+      <div className={`hero-modal${assistantOpen ? " assistant-expanded" : ""}`}>
         <button aria-label="关闭" className="modal-close" onClick={onClose} type="button">×</button>
         <div className="hero-visual-column">
           <HeroCard hero={hero} />
@@ -70,13 +73,26 @@ export function HeroDetail({
           </section>
           <div className="modal-links">
             {hero.faceToFace === "assisted" && (
-              <button className="assistant-open-button" onClick={() => onOpenAssistant(hero)} type="button">
-                打开面杀辅助
+              <button
+                aria-controls="inline-skill-assistant"
+                aria-expanded={assistantOpen}
+                className="assistant-open-button"
+                onClick={() => setAssistantOpen((open) => !open)}
+                type="button"
+              >
+                {assistantOpen ? "收起面杀辅助" : "展开面杀辅助"}
               </button>
             )}
             <a href={hero.wikiUrl} rel="noreferrer" target="_blank">核对移动版现行技能 ↗</a>
           </div>
         </div>
+        {assistantOpen && (
+          <SkillAssistant
+            hero={hero}
+            heroes={heroes}
+            onClose={() => setAssistantOpen(false)}
+          />
+        )}
       </div>
     </div>
   );

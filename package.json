@@ -12,7 +12,7 @@
     "data:update": "node scripts/update-mobile-heroes.mjs --refresh",
     "data:assistants": "node scripts/apply-assistant-modules.mjs",
     "start": "vinext start",
-    "test:unit": "node --test tests/mobile-pool-rules.test.mjs tests/granted-skill-rules.test.mjs tests/pool-filter.test.mjs tests/assistant-rules.test.mjs tests/tabletop-assistant-rules.test.mjs",
+    "test:unit": "node --test tests/mobile-pool-rules.test.mjs tests/granted-skill-rules.test.mjs tests/pool-filter.test.mjs tests/assistant-rules.test.mjs tests/tabletop-assistant-rules.test.mjs tests/inline-assistant.test.mjs",
     "test": "pnpm run test:unit && pnpm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern netlify-dist --ignore-pattern work",
     "db:generate": "drizzle-kit generate"
