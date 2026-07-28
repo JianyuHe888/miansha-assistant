@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { getTabletopAssistantModules } from "../app/lib/tabletop-assistant-rules.mjs";
 import { getExistingImage } from "../scripts/mobile-data-cache.mjs";
 import { getPresetLevel } from "../scripts/mobile-pool-rules.mjs";
 
@@ -48,7 +49,30 @@ test("registers every approved mobile-only helper", () => {
   assert.deepEqual(byName["马钧"].assistantModules, ["baixi", "jingxie"]);
   assert.deepEqual(byName["周群"].assistantModules, ["mingyunqian"]);
   assert.deepEqual(byName["十常侍"].assistantModules, ["jiedang"]);
+  assert.deepEqual(byName["兀突骨"].assistantModules, ["trackers"]);
+  assert.deepEqual(byName["赵襄"].assistantModules, ["trackers", "fuhan"]);
+  assert.deepEqual(byName["谋徐晃"].assistantModules, ["mouyi"]);
+  assert.deepEqual(byName["谋马超"].assistantModules, ["mouyi"]);
+  assert.deepEqual(byName["界张嶷"].assistantModules, ["mouyi"]);
+  assert.deepEqual(byName["韩玄"].assistantModules, ["mouyi"]);
+  assert.ok(byName["严颜"].assistantModules.includes("conversion"));
+  assert.deepEqual(byName["司马孚"].assistantModules, ["alternating-choice"]);
   assert.equal(heroes.filter((hero) => hero.faceToFace === "excluded").length, 0);
+});
+
+test("generated data stays synchronized with tabletop mechanic detection", () => {
+  const manualIds = new Set([
+    "huashen",
+    "zhengjing",
+    "baixi",
+    "jingxie",
+    "mingyunqian",
+    "jiedang",
+  ]);
+  for (const hero of heroes) {
+    const generated = hero.assistantModules.filter((id) => !manualIds.has(id));
+    assert.deepEqual(generated, getTabletopAssistantModules(hero), hero.name);
+  }
 });
 
 test("reuses a generated wiki image when refreshing from local caches", () => {

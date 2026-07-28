@@ -3,6 +3,7 @@
 import type { Hero } from "../lib/hero-types";
 import { HeroCard } from "./HeroCard";
 import { SkillText } from "./SkillText";
+import { VitalityTracker } from "./VitalityTracker";
 
 const POOL_LABELS = ["", "经典身份", "界限平衡", "进阶平衡", "完整将池"];
 
@@ -30,7 +31,10 @@ export function HeroDetail({
     >
       <div className="hero-modal">
         <button aria-label="关闭" className="modal-close" onClick={onClose} type="button">×</button>
-        <HeroCard hero={hero} />
+        <div className="hero-visual-column">
+          <HeroCard hero={hero} />
+          <VitalityTracker hero={hero} />
+        </div>
         <div className="modal-copy">
           <span>CHARACTER CARD / 武将信息卡</span>
           <div className="modal-name-row">

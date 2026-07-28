@@ -67,7 +67,12 @@ test("ships a complete and normalized mobile identity catalog", async () => {
   assert.equal(heroes.filter((hero) => hero.presetLevel <= 2).length, 293);
   assert.equal(heroes.filter((hero) => hero.presetLevel <= 3).length, 400);
   assert.equal(heroes.filter((hero) => hero.presetLevel <= 4).length, 573);
-  assert.equal(heroes.filter((hero) => hero.faceToFace === "assisted").length, 6);
+  const assisted = heroes.filter((hero) => hero.faceToFace === "assisted");
+  assert.equal(
+    assisted.length,
+    heroes.filter((hero) => hero.assistantModules.length > 0).length,
+  );
+  assert.ok(assisted.length >= 90);
   assert.equal(new Set(heroes.map((hero) => hero.id)).size, heroes.length);
   assert.ok(heroes.every((hero) => hero.name && hero.faction && hero.pack && hero.sourcePack));
   assert.ok(heroes.every((hero) => /^https:\/\//.test(hero.image)));

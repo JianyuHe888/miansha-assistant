@@ -3,6 +3,7 @@ import faceToFaceConfig from "../app/data/face-to-face.json" with { type: "json"
 import { classifyHeroSkills } from "./granted-skill-rules.mjs";
 import { getExistingImage } from "./mobile-data-cache.mjs";
 import { getPresetLevel } from "./mobile-pool-rules.mjs";
+import { getTabletopAssistantModules } from "../app/lib/tabletop-assistant-rules.mjs";
 
 const dataUrl = new URL("../app/data/heroes.json", import.meta.url);
 const cacheUrl = new URL("./.cache/", import.meta.url);
@@ -506,7 +507,13 @@ async function main() {
       continue;
     }
 
-    const assistantModules = assistedModulesByHero.get(wikiHero.name) ?? [];
+    const assistantModules = [
+      ...(assistedModulesByHero.get(wikiHero.name) ?? []),
+      ...getTabletopAssistantModules({
+        name: wikiHero.name,
+        skills,
+      }),
+    ];
     const excludedReason = faceToFaceConfig.excluded[wikiHero.name];
     const hero = {
       id: official?.id ?? `wiki-${wikiHero.name}`,

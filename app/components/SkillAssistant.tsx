@@ -9,6 +9,11 @@ import { HuashenAssistant } from "./assistants/HuashenAssistant";
 import { JiedangAssistant } from "./assistants/JiedangAssistant";
 import { JingxieReference } from "./assistants/JingxieReference";
 import { ZhengjingAssistant } from "./assistants/ZhengjingAssistant";
+import { AlternatingChoiceAssistant } from "./assistants/AlternatingChoiceAssistant";
+import { ConversionAssistant } from "./assistants/ConversionAssistant";
+import { FuhanAssistant } from "./assistants/FuhanAssistant";
+import { MouyiAssistant } from "./assistants/MouyiAssistant";
+import { TrackerAssistant } from "./assistants/TrackerAssistant";
 
 const REGISTRY = {
   huashen: { title: "化身助手", component: HuashenAssistant },
@@ -17,6 +22,11 @@ const REGISTRY = {
   jingxie: { title: "精械对照", component: JingxieReference },
   mingyunqian: { title: "命运签", component: FortuneAssistant },
   jiedang: { title: "结党助手", component: JiedangAssistant },
+  trackers: { title: "标记与蓄力", component: TrackerAssistant },
+  fuhan: { title: "扶汉选将", component: FuhanAssistant },
+  mouyi: { title: "谋弈", component: MouyiAssistant },
+  conversion: { title: "转换技", component: ConversionAssistant },
+  "alternating-choice": { title: "逐目标交替", component: AlternatingChoiceAssistant },
 } as const;
 
 export function SkillAssistant({
