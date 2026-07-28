@@ -27,7 +27,7 @@ export function YinYangHealth({
             className={`yin-yang-fish${index >= safeCurrent ? " is-lost" : ""}`}
             key={index}
           >
-            ☯
+            ☯︎
           </i>
         ))}
         {overflow > 0 && <b className="yin-yang-overflow">+{overflow}</b>}

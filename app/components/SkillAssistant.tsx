@@ -33,11 +33,13 @@ export function SkillAssistant({
   hero,
   heroes,
   initialModuleId,
+  onModuleStateChange,
   onClose,
 }: {
   hero: Hero;
   heroes: Hero[];
   initialModuleId?: string;
+  onModuleStateChange?: (moduleId: string, state: unknown) => void;
   onClose: () => void;
 }) {
   const [activeId, setActiveId] = useState(initialModuleId ?? hero.assistantModules[0]);
@@ -49,19 +51,23 @@ export function SkillAssistant({
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      setState(loadAssistantState(window.localStorage, storageKey, null));
+      const saved = loadAssistantState(window.localStorage, storageKey, null);
+      setState(saved);
+      onModuleStateChange?.(activeId, saved);
       setConfirmReset(false);
     }, 0);
     return () => window.clearTimeout(timer);
-  }, [storageKey]);
+  }, [activeId, onModuleStateChange, storageKey]);
 
   const update = (next: unknown) => {
     setState(next);
     saveAssistantState(window.localStorage, storageKey, next);
+    onModuleStateChange?.(activeId, next);
   };
   const reset = () => {
     clearAssistantState(window.localStorage, storageKey);
     setState(null);
+    onModuleStateChange?.(activeId, null);
     setConfirmReset(false);
     setResetNonce((value) => value + 1);
   };

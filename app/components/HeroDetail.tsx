@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { getAssistantStorageKey, loadAssistantState, saveAssistantState } from "../lib/assistant-rules.mjs";
 import type { Hero } from "../lib/hero-types";
+import { createHeroCounterState, createVitalityState } from "../lib/tabletop-assistant-rules.mjs";
 import { ArmorDisplay } from "./ArmorDisplay";
 import { HeroCard } from "./HeroCard";
 import { SkillAssistant } from "./SkillAssistant";
@@ -10,6 +12,8 @@ import { VitalityTracker } from "./VitalityTracker";
 import { YinYangHealth } from "./YinYangHealth";
 
 const POOL_LABELS = ["", "经典身份", "界限平衡", "进阶平衡", "完整将池"];
+type CounterState = ReturnType<typeof createHeroCounterState>;
+type VitalityState = ReturnType<typeof createVitalityState>;
 
 export function HeroDetail({
   hero,
@@ -21,8 +25,36 @@ export function HeroDetail({
   onClose: () => void;
 }) {
   const [assistantOpen, setAssistantOpen] = useState(false);
+  const [vitalityState, setVitalityState] = useState<VitalityState>(() => createVitalityState(hero));
+  const [counterState, setCounterState] = useState<CounterState>(() => createHeroCounterState(hero));
+  const [flipped, setFlipped] = useState(false);
   const baseSkills = hero.skills.filter((skill) => skill.kind === "base");
   const skillIndex = new Map(hero.skills.map((skill) => [skill.id, skill]));
+  const trackerStorageKey = getAssistantStorageKey("trackers", hero.id);
+  const flipStorageKey = getAssistantStorageKey("card-face", hero.id);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const initialCounters = createHeroCounterState(hero) as CounterState;
+      setVitalityState(createVitalityState(hero) as VitalityState);
+      setCounterState(loadAssistantState(window.localStorage, trackerStorageKey, initialCounters) as CounterState);
+      setFlipped(Boolean(loadAssistantState(window.localStorage, flipStorageKey, false)));
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [flipStorageKey, hero, trackerStorageKey]);
+
+  const handleModuleStateChange = useCallback((moduleId: string, next: unknown) => {
+    if (moduleId !== "trackers") return;
+    setCounterState((next as CounterState | null) ?? createHeroCounterState(hero));
+  }, [hero]);
+
+  const toggleFlipped = () => {
+    setFlipped((current) => {
+      const next = !current;
+      saveAssistantState(window.localStorage, flipStorageKey, next);
+      return next;
+    });
+  };
 
   return (
     <div
@@ -37,8 +69,14 @@ export function HeroDetail({
       <div className={`hero-modal${assistantOpen ? " assistant-expanded" : ""}`}>
         <button aria-label="关闭" className="modal-close" onClick={onClose} type="button">×</button>
         <div className="hero-visual-column">
-          <HeroCard hero={hero} />
-          <VitalityTracker hero={hero} />
+          <HeroCard
+            counterState={counterState}
+            flipped={flipped}
+            hero={hero}
+            onFlip={toggleFlipped}
+            vitalityState={vitalityState}
+          />
+          <VitalityTracker hero={hero} onStateChange={setVitalityState} />
         </div>
         <div className="modal-copy">
           <span>CHARACTER CARD / 武将信息卡</span>
@@ -98,6 +136,7 @@ export function HeroDetail({
           <SkillAssistant
             hero={hero}
             heroes={heroes}
+            onModuleStateChange={handleModuleStateChange}
             onClose={() => setAssistantOpen(false)}
           />
         )}

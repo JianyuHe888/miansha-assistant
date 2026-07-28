@@ -190,6 +190,32 @@ export function createHeroCounterState(hero, seats = DEFAULT_SEATS) {
   return state;
 }
 
+export function getHeroCardCounters(hero, state = null) {
+  const entries = state?.entries ?? {};
+  const counters = [];
+  const seen = new Set();
+
+  for (const counter of getSuggestedCounters(hero)) {
+    if (counter.name === "护甲") continue;
+    const saved = entries[`自己::${counter.name}`];
+    counters.push({
+      name: counter.name,
+      count: Number.isFinite(saved) ? Math.max(0, Math.round(saved)) : counter.initial,
+    });
+    seen.add(counter.name);
+  }
+
+  for (const [key, count] of Object.entries(entries)) {
+    if (!key.startsWith("自己::") || !Number.isFinite(count) || count <= 0) continue;
+    const name = key.slice("自己::".length);
+    if (!name || name === "护甲" || seen.has(name)) continue;
+    counters.push({ name, count: Math.max(0, Math.round(count)) });
+    seen.add(name);
+  }
+
+  return counters;
+}
+
 export function addCounter(state, mark, seat, delta = 1) {
   const key = `${seat}::${mark}`;
   const current = Number(state.entries?.[key]) || 0;

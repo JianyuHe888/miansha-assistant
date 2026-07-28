@@ -216,7 +216,7 @@ button { color: inherit; }
 .hp { max-width: 100px; display: grid; justify-items: end; gap: 3px; line-height: 1; }
 .yin-yang-health { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 7px; vertical-align: middle; }
 .yin-yang-fishes { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 2px; }
-.yin-yang-fish { color: #52c455; font-family: "Noto Serif SC", "Segoe UI Symbol", serif; font-size: 17px; font-style: normal; line-height: 1; text-shadow: 0 1px 0 rgba(255,255,255,.6), 0 0 5px rgba(82,196,85,.18); }
+.yin-yang-fish { color: #52c455; font-family: "Noto Serif SC", "Segoe UI Symbol", serif; font-size: 17px; font-style: normal; font-variant-emoji: text; line-height: 1; text-shadow: 0 1px 0 rgba(255,255,255,.6), 0 0 5px rgba(82,196,85,.18); }
 .yin-yang-fish.is-lost { color: rgba(57,112,55,.13); text-shadow: none; -webkit-text-stroke: 1px rgba(57,112,55,.35); }
 .yin-yang-overflow { color: #367a3c; font-family: system-ui, sans-serif; font-size: 9px; }
 .yin-yang-numbers { color: #35783d; font-family: Georgia, serif; font-size: 12px; white-space: nowrap; }
@@ -232,6 +232,14 @@ button { color: inherit; }
 .armor-display > small { color: #8b641f; font-family: system-ui, sans-serif; font-size: 10px; white-space: nowrap; }
 .armor-display.is-compact .armor-shield { width: 10px; height: 12px; background: linear-gradient(145deg, #f6dda2, #bd8b32 75%); filter: drop-shadow(0 1px 2px rgba(0,0,0,.65)); }
 .armor-display.is-compact .armor-shields b { color: #f0d79f; }
+.card-marks { position: absolute; z-index: 6; left: 14px; right: 14px; bottom: 68px; display: flex; flex-wrap: wrap; gap: 4px; pointer-events: none; }
+.card-marks > span { min-height: 23px; padding: 3px 7px; display: inline-flex; align-items: center; gap: 4px; border: 1px solid rgba(246,218,157,.56); border-radius: 2px; background: rgba(62,28,20,.82); color: #f5dfb6; box-shadow: 0 3px 9px rgba(0,0,0,.28); font-family: system-ui, sans-serif; line-height: 1; }
+.card-marks b { font-size: 9px; }
+.card-marks i { color: #f4bd65; font-size: 10px; font-style: normal; font-weight: 800; }
+.hero-card.flippable { cursor: pointer; touch-action: manipulation; user-select: none; }
+.hero-card.flippable:focus-visible { outline: 3px solid #f0cf91; outline-offset: 3px; }
+.hero-card.is-flipped::after { content: ""; position: absolute; z-index: 9; inset: 0; background: rgba(14,12,11,.72); box-shadow: inset 0 0 45px rgba(0,0,0,.8); pointer-events: none; }
+.flip-state { position: absolute; z-index: 10; inset: 50% auto auto 50%; transform: translate(-50%,-50%) rotate(-5deg); padding: 8px 13px; border: 2px solid rgba(244,214,158,.8); background: rgba(103,34,27,.82); color: #f7e4bf; box-shadow: 0 8px 24px rgba(0,0,0,.48); font-size: clamp(23px,3vw,38px); font-weight: 800; letter-spacing: .16em; text-indent: .16em; text-shadow: 0 2px 6px rgba(0,0,0,.65); pointer-events: none; }
 .card-hitarea { position: absolute; z-index: 8; inset: 0; border: 0; background: transparent; cursor: pointer; }
 .card-hitarea:focus-visible { outline: 3px solid #f0cf91; outline-offset: -5px; }
 .hero-card:hover:has(.card-hitarea) { transform: translateY(-4px); box-shadow: 0 25px 50px rgba(54,34,20,.3); }
@@ -249,6 +257,9 @@ button { color: inherit; }
 .hero-card.compact .hp { display: none; }
 .hero-card.compact .card-statuses { top: 43px; right: 8px; }
 .hero-card.compact .card-statuses small { display: none; }
+.hero-card.compact .card-marks { left: 9px; right: 9px; bottom: 50px; gap: 3px; }
+.hero-card.compact .card-marks > span { min-height: 18px; padding: 2px 5px; }
+.hero-card.compact .card-marks b, .hero-card.compact .card-marks i { font-size: 7px; }
 
 .draw-actions { margin-top: 8px; display: grid; grid-template-columns: minmax(240px, 380px) 1fr; align-items: center; gap: 18px; }
 .draw-button { min-height: 66px; padding: 0 8px 0 25px; border: 0; display: flex; align-items: center; justify-content: space-between; background: var(--cinnabar); color: #f8ecda; box-shadow: 0 12px 30px rgba(123,33,27,.2); cursor: pointer; transition: .2s ease; }

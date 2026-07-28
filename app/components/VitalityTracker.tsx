@@ -28,7 +28,13 @@ function eventText(event: VitalityState["lastEvent"]) {
   return "状态已更新";
 }
 
-export function VitalityTracker({ hero }: { hero: Hero }) {
+export function VitalityTracker({
+  hero,
+  onStateChange,
+}: {
+  hero: Hero;
+  onStateChange?: (state: VitalityState) => void;
+}) {
   const initial = createVitalityState(hero) as VitalityState;
   const [state, setState] = useState<VitalityState | null>(null);
   const storageKey = getAssistantStorageKey("vitality", hero.id);
@@ -38,19 +44,22 @@ export function VitalityTracker({ hero }: { hero: Hero }) {
     const timer = window.setTimeout(() => {
       const saved = loadAssistantState(window.localStorage, storageKey, initial) as VitalityState;
       setState(saved);
+      onStateChange?.(saved);
     }, 0);
     return () => window.clearTimeout(timer);
   // The initial state is derived from hero and should reload only when the hero changes.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storageKey]);
+  }, [storageKey, onStateChange]);
 
   const update = (next: VitalityState) => {
     setState(next);
     saveAssistantState(window.localStorage, storageKey, next);
+    onStateChange?.(next);
   };
   const reset = () => {
     clearAssistantState(window.localStorage, storageKey);
     setState(initial);
+    onStateChange?.(initial);
   };
 
   return (

@@ -2,6 +2,7 @@
 
 import type { Hero } from "../lib/hero-types";
 import { ArmorDisplay } from "./ArmorDisplay";
+import { HeroCardMarks } from "./HeroCardMarks";
 import { YinYangHealth } from "./YinYangHealth";
 
 const POOL_LABELS = ["", "经典身份", "界限平衡", "进阶平衡", "完整将池"];
@@ -10,19 +11,52 @@ export function HeroCard({
   hero,
   compact = false,
   disabled = false,
+  vitalityState,
+  counterState,
+  flipped = false,
+  onFlip,
   onInspect,
 }: {
   hero: Hero;
   compact?: boolean;
   disabled?: boolean;
+  vitalityState?: { hp: number; maxHp: number; armor: number } | null;
+  counterState?: { entries: Record<string, number> } | null;
+  flipped?: boolean;
+  onFlip?: () => void;
   onInspect?: (hero: Hero) => void;
 }) {
-  const className = ["hero-card", compact && "compact", disabled && "disabled"]
+  const className = [
+    "hero-card",
+    compact && "compact",
+    disabled && "disabled",
+    onFlip && "flippable",
+    flipped && "is-flipped",
+  ]
     .filter(Boolean)
     .join(" ");
+  const currentHp = vitalityState?.hp ?? hero.hp;
+  const maxHp = vitalityState?.maxHp ?? hero.maxHp ?? hero.hp;
+  const armor = vitalityState?.armor ?? hero.armor ?? 0;
 
   return (
-    <article className={className} data-faction={hero.faction}>
+    <article
+      aria-label={onFlip ? `${hero.name}武将牌，${flipped ? "已翻面" : "正面朝上"}，双击切换` : undefined}
+      aria-pressed={onFlip ? flipped : undefined}
+      className={className}
+      data-faction={hero.faction}
+      onDoubleClick={onFlip ? (event) => {
+        event.preventDefault();
+        onFlip();
+      } : undefined}
+      onKeyDown={onFlip ? (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        onFlip();
+      } : undefined}
+      role={onFlip ? "button" : undefined}
+      tabIndex={onFlip ? 0 : undefined}
+    >
       <div className="card-grain" />
       <div className="card-topline">
         <span className="faction-seal">{hero.faction}</span>
@@ -46,16 +80,18 @@ export function HeroCard({
       />
       <div className="silhouette" aria-hidden="true">将</div>
       <div className="ink-wash" />
+      <HeroCardMarks hero={hero} state={counterState} />
       <div className="hero-caption">
         <div>
           <p>{hero.pack}</p>
           <h3>{hero.name}</h3>
         </div>
         <div className="hp">
-          <YinYangHealth compact current={hero.hp} max={hero.maxHp ?? hero.hp} />
-          {hero.armor ? <ArmorDisplay armor={hero.armor} compact /> : null}
+          <YinYangHealth compact current={currentHp} max={maxHp} />
+          {armor > 0 ? <ArmorDisplay armor={armor} compact /> : null}
         </div>
       </div>
+      {flipped && <span aria-hidden="true" className="flip-state">翻面</span>}
       {onInspect && (
         <button
           aria-label={`查看${hero.name}`}
