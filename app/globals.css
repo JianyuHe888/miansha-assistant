@@ -293,8 +293,8 @@ footer a { color: var(--cinnabar); font-family: system-ui, sans-serif; font-size
 
 body.modal-open { overflow: hidden; }
 .modal-backdrop { position: fixed; z-index: 80; inset: 0; padding: 24px; display: grid; place-items: center; background: rgba(27,20,15,.82); backdrop-filter: blur(10px); animation: fadeIn .2s ease; }
-.hero-modal { width: min(980px, 100%); max-height: calc(100dvh - 48px); display: grid; grid-template-columns: minmax(270px, 340px) minmax(0, 1fr); gap: 38px; padding: 28px; overflow: hidden; background: #ece3d3; border: 1px solid rgba(255,255,255,.28); box-shadow: 0 30px 90px rgba(0,0,0,.45); position: relative; }
-.hero-modal.assistant-expanded { width: min(1480px, 100%); grid-template-columns: minmax(250px, 320px) minmax(300px, .8fr) minmax(380px, 1.2fr); gap: 24px; }
+.hero-modal { width: min(1120px, 100%); max-height: calc(100dvh - 48px); display: grid; grid-template-columns: minmax(220px, 275px) minmax(0, 1fr); gap: 32px; padding: 28px; overflow: hidden; background: #ece3d3; border: 1px solid rgba(255,255,255,.28); box-shadow: 0 30px 90px rgba(0,0,0,.45); position: relative; }
+.hero-modal.assistant-expanded { width: min(1480px, 100%); grid-template-columns: minmax(210px, 255px) minmax(400px, .9fr) minmax(380px, 1.2fr); gap: 22px; }
 .hero-modal.assistant-expanded .hero-visual-column, .hero-modal.assistant-expanded .modal-copy { align-self: start; }
 .hero-visual-column { min-width: 0; max-height: calc(100dvh - 104px); align-self: center; display: grid; gap: 0; overflow-y: auto; scrollbar-width: thin; }
 .hero-visual-column > .hero-card { width: 100%; }
@@ -341,8 +341,8 @@ body.modal-open { overflow: hidden; }
 .modal-copy dl div { padding: 16px 0; border-right: 1px solid var(--line); }
 .modal-copy dl div:last-child { border: 0; padding-left: 14px; }
 .modal-copy dl div:nth-child(2) { padding-left: 14px; }
-.modal-copy dt { color: #8a7f71; font-family: system-ui, sans-serif; font-size: 9px; }
-.modal-copy dd { margin: 6px 0 0; font-size: 16px; }
+.modal-copy dt { color: #8a7f71; font-family: system-ui, sans-serif; font-size: 10px; }
+.modal-copy dd { margin: 6px 0 0; font-size: 17px; }
 .detail-vitality { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; }
 .detail-vitality .yin-yang-fish { font-size: 15px; }
 .detail-vitality .armor-display { padding: 3px 5px; background: rgba(62,101,119,.08); }
@@ -350,11 +350,11 @@ body.modal-open { overflow: hidden; }
 .skill-item p { white-space: pre-line; }
 .modal-section-title { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
 .modal-section-title span { color: var(--cinnabar); font-family: system-ui, sans-serif; font-size: 9px; letter-spacing: .16em; }
-.modal-section-title h3 { margin: 0; font-size: 18px; }
+.modal-section-title h3 { margin: 0; font-size: 20px; }
 .skill-list { display: grid; gap: 9px; }
-.skill-item { padding: 12px 14px; border-left: 3px solid var(--cinnabar); background: rgba(255,255,255,.32); }
-.skill-item h4 { margin: 0 0 5px; color: var(--cinnabar-dark); font-size: 15px; letter-spacing: .06em; }
-.skill-item p { margin: 0; color: #5f574e; font-family: system-ui, sans-serif; font-size: 12px; line-height: 1.72; }
+.skill-item { padding: 15px 17px; border-left: 3px solid var(--cinnabar); background: rgba(255,255,255,.32); }
+.skill-item h4 { margin: 0 0 6px; color: var(--cinnabar-dark); font-size: 17px; letter-spacing: .06em; }
+.skill-item p { margin: 0; color: #5f574e; font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.78; }
 .modal-copy a { display: inline-flex; padding: 12px 17px; background: var(--cinnabar); color: white; font-family: system-ui, sans-serif; font-size: 12px; text-decoration: none; }
 .granted-skill-link, .shared-rule-link, .granted-skill-shortcuts button { margin: 0 2px; padding: 0 3px; border: 0; border-bottom: 1px dashed var(--cinnabar); background: transparent; color: var(--cinnabar); font: inherit; font-weight: 750; cursor: pointer; }
 .granted-skill-link::after, .shared-rule-link::after { content: "＋"; margin-left: 2px; font-size: .8em; }
@@ -529,7 +529,7 @@ body.modal-open { overflow: hidden; }
   footer p { grid-column: 1 / -1; grid-row: 2; margin: 0; }
   .huashen-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .jiedang-candidates { grid-template-columns: repeat(3,minmax(0,1fr)); }
-  .hero-modal.assistant-expanded { width: min(980px, 100%); grid-template-columns: minmax(220px, 300px) minmax(0, 1fr); align-items: start; overflow-y: auto; }
+  .hero-modal.assistant-expanded { width: min(1120px, 100%); grid-template-columns: minmax(190px, 235px) minmax(0, 1fr); align-items: start; overflow-y: auto; }
   .hero-modal.assistant-expanded .hero-visual-column, .hero-modal.assistant-expanded .modal-copy { max-height: none; }
   .hero-modal.assistant-expanded .assistant-inline { grid-column: 1 / -1; max-height: none; min-height: 560px; overflow: visible; border-top: 1px solid var(--line); border-left: 0; }
   .hero-modal.assistant-expanded .assistant-panel { max-height: 70vh; }
@@ -572,8 +572,8 @@ body.modal-open { overflow: hidden; }
   footer { grid-template-columns: 1fr; gap: 16px; }
   footer p { grid-column: auto; grid-row: auto; }
   .modal-backdrop { padding: 10px; }
-  .hero-modal { width: 100%; max-height: calc(100dvh - 20px); grid-template-columns: 132px minmax(0,1fr); gap: 15px; padding: 44px 12px 14px; align-items: center; }
-  .hero-modal.assistant-expanded { grid-template-columns: 132px minmax(0,1fr); gap: 15px; }
+  .hero-modal { width: 100%; max-height: calc(100dvh - 20px); grid-template-columns: 108px minmax(0,1fr); gap: 12px; padding: 44px 12px 14px; align-items: center; }
+  .hero-modal.assistant-expanded { grid-template-columns: 108px minmax(0,1fr); gap: 12px; }
   .hero-visual-column { align-self: start; position: sticky; top: 0; }
   .vitality-tracker { margin: -4px 0 0; padding: 7px; }
   .vitality-tracker header { grid-template-columns: 1fr auto; gap: 5px; }.vitality-tracker header > button { grid-column: 1 / -1; height: 25px; padding: 0; }
@@ -588,9 +588,9 @@ body.modal-open { overflow: hidden; }
   .modal-copy dl { grid-template-columns: 1fr 1fr; }
   .modal-copy dl div:last-child { display: none; }
   .modal-skills { margin-block: 14px; }
-  .skill-item { padding: 9px 10px; }
-  .skill-item h4 { font-size: 13px; }
-  .skill-item p { font-size: 10px; }
+  .skill-item { padding: 10px 11px; }
+  .skill-item h4 { font-size: 14px; }
+  .skill-item p { font-size: 11px; line-height: 1.68; }
   .pool-presets { grid-template-columns: 1fr 1fr; }
   .pool-preset { min-height: 52px; }
   .assistant-header { padding-inline: 16px; align-items: flex-start; }
