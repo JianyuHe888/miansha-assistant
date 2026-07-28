@@ -1,6 +1,8 @@
 "use client";
 
 import type { Hero } from "../lib/hero-types";
+import { ArmorDisplay } from "./ArmorDisplay";
+import { YinYangHealth } from "./YinYangHealth";
 
 const POOL_LABELS = ["", "经典身份", "界限平衡", "进阶平衡", "完整将池"];
 
@@ -49,14 +51,9 @@ export function HeroCard({
           <p>{hero.pack}</p>
           <h3>{hero.name}</h3>
         </div>
-        <div
-          className="hp"
-          aria-label={`${hero.hp}${hero.maxHp ? `/${hero.maxHp}` : ""}点体力${hero.armor ? `，${hero.armor}点护甲` : ""}`}
-        >
-          {Array.from({ length: Math.min(hero.hp, 6) }, (_, index) => <i key={index}>◆</i>)}
-          {hero.hp > 6 && <b>+{hero.hp - 6}</b>}
-          {hero.maxHp && <b>/{hero.maxHp}</b>}
-          {hero.armor && <b>盾{hero.armor}</b>}
+        <div className="hp">
+          <YinYangHealth compact current={hero.hp} max={hero.maxHp ?? hero.hp} />
+          {hero.armor ? <ArmorDisplay armor={hero.armor} compact /> : null}
         </div>
       </div>
       {onInspect && (

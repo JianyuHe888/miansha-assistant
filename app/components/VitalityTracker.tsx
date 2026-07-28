@@ -11,6 +11,8 @@ import {
 } from "../lib/tabletop-assistant-rules.mjs";
 import { clearAssistantState, getAssistantStorageKey, loadAssistantState, saveAssistantState } from "../lib/assistant-rules.mjs";
 import type { Hero } from "../lib/hero-types";
+import { ArmorDisplay } from "./ArmorDisplay";
+import { YinYangHealth } from "./YinYangHealth";
 
 type VitalityState = ReturnType<typeof createVitalityState>;
 
@@ -54,8 +56,14 @@ export function VitalityTracker({ hero }: { hero: Hero }) {
   return (
     <section className="vitality-tracker" aria-label={`${hero.name}本局体力台`}>
       <header>
-        <div><span>本局体力</span><strong>{current.hp}<small> / {current.maxHp}</small></strong></div>
-        <div className="armor-value"><span>护甲</span><strong>{current.armor}</strong></div>
+        <div className="vitality-current">
+          <span>本局体力</span>
+          <YinYangHealth current={current.hp} max={current.maxHp} showNumbers />
+        </div>
+        <div className="armor-value">
+          <span>护甲</span>
+          <ArmorDisplay armor={current.armor} showNumbers />
+        </div>
         <button onClick={reset} type="button">复原</button>
       </header>
       <div className="vitality-actions">

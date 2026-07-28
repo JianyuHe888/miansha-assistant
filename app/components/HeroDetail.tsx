@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import type { Hero } from "../lib/hero-types";
+import { ArmorDisplay } from "./ArmorDisplay";
 import { HeroCard } from "./HeroCard";
 import { SkillAssistant } from "./SkillAssistant";
 import { SkillText } from "./SkillText";
 import { VitalityTracker } from "./VitalityTracker";
+import { YinYangHealth } from "./YinYangHealth";
 
 const POOL_LABELS = ["", "经典身份", "界限平衡", "进阶平衡", "完整将池"];
 
@@ -54,7 +56,13 @@ export function HeroDetail({
           </div>
           <dl>
             <div><dt>势力</dt><dd>{hero.faction}</dd></div>
-            <div><dt>体力</dt><dd>{hero.hp}{hero.maxHp ? ` / ${hero.maxHp}` : ""} 点{hero.armor ? ` · 护甲 ${hero.armor}` : ""}</dd></div>
+            <div>
+              <dt>体力</dt>
+              <dd className="detail-vitality">
+                <YinYangHealth current={hero.hp} max={hero.maxHp ?? hero.hp} showNumbers />
+                {hero.armor ? <ArmorDisplay armor={hero.armor} showNumbers /> : null}
+              </dd>
+            </div>
             <div><dt>系列</dt><dd>{hero.pack}</dd></div>
           </dl>
           {hero.faceToFace === "excluded" && hero.excludedReason && (
